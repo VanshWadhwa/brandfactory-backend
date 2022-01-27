@@ -5,6 +5,8 @@ from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework import status
+import pathlib
+
 
 import os
 import base64
@@ -193,6 +195,14 @@ class PostView(APIView):
         short_report.close()
         
         os.remove(finalPath)
+    
+        try:
+            if (imageFrom[0] == "url"):
+                os.remove(str(pathlib.Path('.').cwd()) + "\\assets\\images\\" + savedFilename)
+                print("removed")
+        except Exception as e :
+            print(e)
+
 
         return Response( res, status=status.HTTP_201_CREATED ,  content_type="image/jpeg")
 
