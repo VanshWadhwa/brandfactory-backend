@@ -42,6 +42,9 @@ class ImageHandler:
         # self.path = "../assets/images/"
         self.path = pathlib.Path('.').cwd()
 
+        self.fileName = imagePath
+
+
 
         if type(imagePath) == str:
             self.imageObj = Image.open(str(self.path) +  '\\assets\\images\\'+ imagePath)
@@ -49,7 +52,7 @@ class ImageHandler:
         else:
             self.imageObj = Image.open(imagePath);
 
-        self.fileName = imagePath.name
+            self.fileName = imagePath.name
         # self.primaryColor = config['DESIGN']['primaryColor']
         # self.secondaryColor = config['DESIGN']['secondaryColor']
 

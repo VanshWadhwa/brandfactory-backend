@@ -1,3 +1,4 @@
+from distutils.command.upload import upload
 from .serializers import PostSerializer
 from .models import Post
 from rest_framework.views import APIView
@@ -49,7 +50,16 @@ class PostView(APIView):
         imageFrom= requestDataDict['imageFrom'],
         title=requestDataDict['title'],
         content= requestDataDict['content'],
-        imageLocation= requestDataDict['image'],
+
+        try:
+
+            imageLocation= requestDataDict['image'],
+        
+        except:
+
+            imageLocation= ''
+
+
         print('imageLocation : ' , imageLocation)
         imageURL=requestDataDict['imageURL'],
         cropType= requestDataDict['cropType'],
@@ -72,6 +82,47 @@ class PostView(APIView):
         # filename = url.split('/')[-1].split('.')[0] + "."
 
         # print('filename : ', filename)
+
+        savedFilename = ''
+
+
+
+        if (imageFrom[0] == "upload"):
+            savedFilename = imageLocation[0].name
+
+            print('-'*10)
+            print("upload")
+            IH = ImageHandler(imageLocation[0])
+
+        elif(imageFrom[0] == "url"):
+            print("imageURL : "  , imageURL[0])
+            
+            filename = imageURL[0].split('/')[-1].split('.')[0] + ".png"
+            # filename = imageLocation[0].split('/')[-1].split('.')[0] + "." + imageLocation[0].split('/')[-1].split('.')[1]
+
+
+            savedFilename = filename
+            # filename = "downloaded_image"
+            print('filename : ', filename)
+            print('imageimageURL : ',imageURL[0])
+            print('-'*10)
+            print("url")
+
+            ID.downloadImage(filename, imageURL[0])
+            # IH = ImageHandler(filename)
+            print()
+            IH = ImageHandler( str(filename))
+
+
+
+
+        else:
+            print('-'*10)
+
+            print('else')
+
+        print(imageFrom)
+        # print(imageFrom[0])
         # ID.downloadImage(filename, url)
 
         # pathOfImage 
@@ -85,7 +136,6 @@ class PostView(APIView):
 
         # print('Filename : ' , filename)
 
-        IH = ImageHandler(imageLocation[0])
 
 
         # IH.secondaryColor = (49, 188, 238)
@@ -117,7 +167,6 @@ class PostView(APIView):
         finalPath = IH.saveImage()
 
         del IH
-        savedFilename = imageLocation[0].name
         location = '/output/' + savedFilename
         
         print("savedFilename :::::>> " , savedFilename)
@@ -137,6 +186,8 @@ class PostView(APIView):
         # 'report': report_encoded})
         
 
+        print("-"*15)
+        print("savedFilename : " , savedFilename)
         res =     {'status':'200' , 'importantWords' : importantWords , 'imgLocation' : location , 'report': report_encoded , 'savedFileName' : savedFilename }
         
         short_report.close()
