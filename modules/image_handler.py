@@ -56,8 +56,12 @@ class ImageHandler:
         # self.primaryColor = config['DESIGN']['primaryColor']
         # self.secondaryColor = config['DESIGN']['secondaryColor']
 
-        self.primaryColor = (212, 212, 35)
-        self.secondaryColor = (123, 221, 0)
+        # self.primaryColor = (212, 212, 35)
+        self.primaryColor = (255,255,255)
+
+        # self.secondaryColor = (123, 221, 0)
+        self.secondaryColor = (27,157,240)
+
 
 
     def overLayImage(self, otherImagePath, atX=0, atY=0, RGBA=1):
