@@ -9,6 +9,7 @@ from rest_framework import status
 import pathlib
 from .models import Profile
 from rest_framework.authtoken.models import Token
+from django.http import HttpResponse
 import json
 # Create your views here.
 
@@ -23,15 +24,30 @@ class ProfileView(APIView):
     # def get(self, request, *args, **kwargs):
     def post(self, request, *args, **kwargs):
         print('hi')
+
+        user = request.user
+
+        if user:
+            print("User token verified")
+        else:
+
+            print("User token not verified")
+
+
+
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
         token_from_req = body['token']
         print('-'*10)
         print(token_from_req)
         print('-'*10)
-        user = Token.objects.get(key='e66cccb2e507c41c9b04600c4db2a889df5cb566').user
-        print(user)
-        # profile = Profile.objects.all()
+        # self.client.force_authenticate(self.user)
+        # user = Token.objects.get(key='e66cccb2e507c41c9b04600c4db2a889df5cb566').user
+        # print(user)
+        
+        print("0"*10)
+ 
+            
         profile = Profile.objects.get(user = user.id)
         print("profile")
         print(profile)
