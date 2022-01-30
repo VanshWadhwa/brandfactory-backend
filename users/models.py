@@ -1,4 +1,5 @@
 from email.policy import default
+from tkinter.tix import Tree
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 import os
@@ -28,12 +29,25 @@ class CustomUser(AbstractUser):
 
 class Profile(models.Model): 
 
- 
+
     user = models.OneToOneField(CustomUser , on_delete=models.CASCADE , related_name='profile')
-    # image = models.ImageField(default = 'default.jpg' , upload_to = 'images/'+user.username)
-    image = models.ImageField(default = 'default.jpg' ,upload_to=lambda instance, filename: 'images/{0}/{1}'.format(instance.user.username, "temp1.png"))
+
+
+    
+    handleName = models.CharField(max_length=20, null = True , blank=True)
     primaryColor = models.CharField(max_length=7, default="#00ff00")
     secondaryColor = models.CharField(max_length=7, default="#ff0000")
+    logoImage = models.ImageField(default = 'defaultLogo.png' ,upload_to=lambda instance, filename: 'images/{0}/{1}'.format(instance.user.username, "logoImage.png"))
+    tempImage1 = models.ImageField(default = 'tempImage1.png' ,upload_to=lambda instance, filename: 'images/{0}/{1}'.format(instance.user.username, "tempImage1.png"))
+    tempImage2 = models.ImageField(default = 'tempImage2.png' ,upload_to=lambda instance, filename: 'images/{0}/{1}'.format(instance.user.username, "tempImage2.png"))
+    tempImage3 = models.ImageField(default = 'tempImage3.png' ,upload_to=lambda instance, filename: 'images/{0}/{1}'.format(instance.user.username, "tempImage3.png"))
+    telegramToken = models.CharField(max_length=200, null = True , blank=True)
+
+
+# Token
+# Telegram token
+    # image = models.ImageField(default = 'default.png' , upload_to = 'images/'+user.username)
+  
 
 
 
