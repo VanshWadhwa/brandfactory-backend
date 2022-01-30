@@ -1,10 +1,12 @@
 from distutils.command.upload import upload
+import profile
 from .serializers import PostSerializer
 from .models import Post
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework import status
+from users.models import Profile
 import pathlib
 
 
@@ -34,6 +36,17 @@ class PostView(APIView):
         print('request.data type: ', type(request.data))
         requestDataDict = request.data.dict()
         print('requestDataDict  type: ', type(requestDataDict))
+
+        # user = request.user.id
+        # prof = Profile.objects.get(id = request.user.id)
+        # print("prof in editor backend : " , user )
+        id = request.user.id
+        if id is not None:
+            prof = Profile.objects.get(id = id)
+            print("prof in editor backend : " , prof )
+            print("primary color of profile : " , prof.primaryColor )
+        else:
+            print("id is none  id : " , id)
 
 
         posts_serializer = PostSerializer(data=request.data)
@@ -94,7 +107,7 @@ class PostView(APIView):
 
             print('-'*10)
             print("upload")
-            IH = ImageHandler(imageLocation[0])
+            IH = ImageHandler(imageLocation[0] , primaryColor=prof.primaryColor , secondaryColor= prof.secondaryColor)
 
         elif(imageFrom[0] == "url"):
             print("imageURL : "  , imageURL[0])

@@ -35,7 +35,7 @@ logger.addHandler(stream_handler)
 
 class ImageHandler:
 
-    def __init__(self, imagePath):
+    def __init__(self, imagePath , primaryColor  = "#ffffff" , secondaryColor = "#1b9df0"):
 
         logger.info("ImageHandler Instance Created")
 
@@ -56,11 +56,11 @@ class ImageHandler:
         # self.primaryColor = config['DESIGN']['primaryColor']
         # self.secondaryColor = config['DESIGN']['secondaryColor']
 
-        # self.primaryColor = (212, 212, 35)
-        self.primaryColor = (255,255,255)
+        # self.primaryColor = (255,255,255)
+        self.primaryColor = primaryColor
 
-        # self.secondaryColor = (123, 221, 0)
-        self.secondaryColor = (27,157,240)
+        # self.secondaryColor = (27,157,240)
+        self.secondaryColor = secondaryColor
 
 
 
