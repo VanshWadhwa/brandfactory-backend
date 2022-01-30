@@ -22,7 +22,7 @@ urlpatterns = [
     path('api/v1/users/', include('users.urls')),
     path('posts/', include('post.urls')),
     path('news/', include('newsData.urls')),
-    path('profile' , include(router.urls)),
+    path('' , include(router.urls)),
 
 ] 
 

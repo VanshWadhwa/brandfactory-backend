@@ -12,20 +12,20 @@ from rest_framework.parsers import MultiPartParser, FormParser
 class ProfileViewSet(viewsets.ViewSet):
     parser_classes = (MultiPartParser, FormParser)
 
-    def list(self , request):
-        prof = Profile.objects.all()
-        serializers = ProfileSerializer(prof , many = True)
-        return Response(serializers.data)
+    # def list(self , request):
+    #     prof = Profile.objects.all()
+    #     serializers = ProfileSerializer(prof , many = True)
+    #     return Response(serializers.data)
 
     def retrieve(self , request , pk=None):
-        id = pk
+        id = request.user.id
         if id is not None:
             prof = Profile.objects.get(id = id)
             serializer = ProfileSerializer(prof)
             return Response(serializer.data)
     
     def update(self , request , pk):
-        id = pk
+        id = request.user.id
         prof = Profile.objects.get(pk = id)
         serializer = ProfileSerializer(prof  , data = request.data )
         if serializer.is_valid():
