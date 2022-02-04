@@ -32,193 +32,101 @@ class PostView(APIView):
         return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
-        print('request.data : ', request.data)
-        print('request.data type: ', type(request.data))
+     
         requestDataDict = request.data.dict()
-        print('requestDataDict  type: ', type(requestDataDict))
-
-        # user = request.user.id
-        # prof = Profile.objects.get(id = request.user.id)
-        # print("prof in editor backend : " , user )
         id = request.user.id
+        username = request.user.username
+
         if id is not None:
             prof = Profile.objects.get(id = id)
-            print("prof in editor backend : " , prof )
-            print("primary color of profile : " , prof.primaryColor )
         else:
             print("id is none  id : " , id)
 
 
         posts_serializer = PostSerializer(data=request.data)
 
-        # if posts_serializer.is_valid():
-
-        print("hey ----->")
-        # print(posts_serializer)
-        # createTemp1()
-
-        # posts_serializer.save()
-
-        # title = requestDataDict['title']
-        # imageLocation = requestDataDict['image']
 
         imageFrom= requestDataDict['imageFrom'],
         title=requestDataDict['title'],
         content= requestDataDict['content'],
+        print("1")
 
         try:
-
             imageLocation= requestDataDict['image'],
-        
         except:
-
             imageLocation= ''
 
-
-        print('imageLocation : ' , imageLocation)
         imageURL=requestDataDict['imageURL'],
         cropType= requestDataDict['cropType'],
+        temp= requestDataDict['temp'],#template type
         isAddGradient= requestDataDict['isAddGradient'] == 'true',
         isAddBranding= requestDataDict['isAddBranding'] == 'true',
         isAddTitleText= requestDataDict['isAddTitleText'],
         titleTextPosition=requestDataDict['titleTextPosition'],
         titleTextAlignment=requestDataDict['titleTextAlignment'] ,
         isContainImportantWords= bool(requestDataDict['isContainImportantWords'] == 'true'),
-        # savedFilename=requestDataDict['savedFilename'],
         imgType = type(imageLocation)
-
-        
-
-        print("type : " , type(isAddGradient))
-
-        # a , b  , importantWords , location = createTemp2(title,imageLocation)
-        # filename = imageLocation[0].split('/')[-1].split('.')[0] + "." + imageLocation[0].split('/')[-1].split('.')[1]
-        # print("filename : " , )
-        # filename = url.split('/')[-1].split('.')[0] + "."
-
-        # print('filename : ', filename)
-
         savedFilename = ''
-
-
+        print("2")
 
         if (imageFrom[0] == "upload"):
             savedFilename = imageLocation[0].name
-
-            print('-'*10)
-            print("upload")
             IH = ImageHandler(imageLocation[0] , primaryColor=prof.primaryColor , secondaryColor= prof.secondaryColor)
 
         elif(imageFrom[0] == "url"):
-            print("imageURL : "  , imageURL[0])
-            
             filename = imageURL[0].split('/')[-1].split('.')[0] + ".png"
-            # filename = imageLocation[0].split('/')[-1].split('.')[0] + "." + imageLocation[0].split('/')[-1].split('.')[1]
-
 
             savedFilename = filename
-            # filename = "downloaded_image"
-            print('filename : ', filename)
-            print('imageimageURL : ',imageURL[0])
-            print('-'*10)
-            print("url")
 
             ID.downloadImage(filename, imageURL[0])
-            # IH = ImageHandler(filename)
-            print()
+        
             IH = ImageHandler( str(filename))
 
-
-
-
         else:
-            print('-'*10)
+            print('Invalid image upload type')
 
-            print('else')
-
-        print(imageFrom)
-        # print(imageFrom[0])
-        # ID.downloadImage(filename, url)
-
-        # pathOfImage 
-        # filename = url
-
-        # filepath =  filename
-        # filepath = "\\media\\post_images\\" + filename
+        print("3")
 
 
 
-
-        # print('Filename : ' , filename)
-
-
-
-        # IH.secondaryColor = (49, 188, 238)
-        IH.resizeImage(type = cropType[0])
-        # IH.resizeImage()
-        print("IDK WHAT 0: " , bool(isAddGradient[0]))
-        print("IDK WHAT 1: " , bool(isAddGradient))
-        print("IDK WHAT 2: " , isAddGradient[0])
-        print("IDK WHAT 2: " , type(isAddGradient[0]))
+        if temp[0] == "temp1":
+            # template 1 selected
+            IH.resizeImage(type = cropType[0])
 
 
-        print("IDK WHAT 3: " , isAddGradient)
 
+            if isAddGradient[0] :
+                IH.overLayImage("\\assets\\images\\basicGradient.png")
+            if isAddBranding[0] :
+                IH.overLayImage("\\assets\\images\\"+username+"\\tempImage1.png")
+            importantWords = IH.addText(
+                title[0], fontSize=5, atY=-170, containsImportantWords=isContainImportantWords[0] ,  returnImportantWords=[0], alignment=titleTextAlignment[0])
+            finalPath = IH.saveImage()
 
-        if isAddGradient[0] :
+            del IH
+            location = '/output/' + savedFilename
+            print("4")
 
-            print("adding gradient")
-            IH.overLayImage("\\assets\\images\\basicGradient.png")
-        if isAddBranding[0] :
-            IH.overLayImage("\\assets\\images\\temp1.png")
+            short_report = open(finalPath, 'rb')
+            report_encoded = base64.b64encode(short_report.read())
 
-        # titleTextX , titleTextY 
+            res =     {'status':'200' ,"msg" : "Post created", 'importantWords' : importantWords , 'imgLocation' : location , 'report': report_encoded , 'savedFileName' : savedFilename }
+            
+            short_report.close()
+            
+            os.remove(finalPath)
 
-        print("isContainImportantWords : " , isContainImportantWords[0])
-        print("isContainImportantWords type : " , type(isContainImportantWords[0]))
+            print("5")
 
-        importantWords = IH.addText(
-            title[0], fontSize=5, atY=-170, containsImportantWords=isContainImportantWords[0] ,  returnImportantWords=[0], alignment=titleTextAlignment[0])
-        finalPath = IH.saveImage()
+            try:
+                if (imageFrom[0] == "url"):
+                    os.remove(str(pathlib.Path('.').cwd()) + "\\assets\\images\\" + savedFilename)
+                    print("removed")
+            except Exception as e :
+                print(e)
 
-        del IH
-        location = '/output/' + savedFilename
-        
-        print("savedFilename :::::>> " , savedFilename)
+            print("6")
+            return Response(res, status=status.HTTP_200_OK ,  content_type="image/jpeg")
+            print("7")
 
-        
-
-
-        print("created post")
-        # posts_serializer.save()
-
-        # return Response(request.data, status=status.HTTP_201_CREATED)
-        print('request.data : ', request.data)
-
-        short_report = open(finalPath, 'rb')
-        report_encoded = base64.b64encode(short_report.read())
-        # return Response({'detail': 'this works',
-        # 'report': report_encoded})
-        
-
-        print("-"*15)
-        print("savedFilename : " , savedFilename)
-        res =     {'status':'200' , 'importantWords' : importantWords , 'imgLocation' : location , 'report': report_encoded , 'savedFileName' : savedFilename }
-        
-        short_report.close()
-        
-        os.remove(finalPath)
-    
-        try:
-            if (imageFrom[0] == "url"):
-                os.remove(str(pathlib.Path('.').cwd()) + "\\assets\\images\\" + savedFilename)
-                print("removed")
-        except Exception as e :
-            print(e)
-
-
-        return Response( res, status=status.HTTP_201_CREATED ,  content_type="image/jpeg")
-
-        # else:
-        #     print('error', posts_serializer.errors)
-        #     return Response(posts_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response( {"status":"400" , "msg" : "bad request served"}, status=status.HTTP_400_BAD_REQUEST ,  content_type="image/jpeg")
