@@ -94,9 +94,12 @@ class ImageHandler:
         
         # alpha = alpha_gradient.resize(input_im.size)
         if type == "corner":
+            print("corner")
+
             self.imageObj = self.imageObj.resize((x, y))
         elif type == "centre":
             # im = Image.open(<your image>)
+            print("center")
             width, height = self.imageObj.size   # Get dimensions
 
             left = (width - x)/2
@@ -265,7 +268,7 @@ class ImageHandler:
         print("FInal Path : " , finalPath)
 
         self.imageObj.save(finalPath)
-        # print("File saved at : " , finalPath)
+        print("File saved at : " , finalPath)
         # logger.debug("Image saved at " + finalPath)
         return finalPath
 
