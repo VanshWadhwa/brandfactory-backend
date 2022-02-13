@@ -87,6 +87,11 @@ class PostView(APIView):
 
         print("3")
 
+        locToTempImage1 = request.user.profile.tempImage1
+        print("locToTempImage1")
+        print(locToTempImage1)
+
+
 
 
         if temp[0] == "temp1":
@@ -102,7 +107,7 @@ class PostView(APIView):
 
                 ID.downloadImage(filename, imageURL[0])
         
-                IH = ImageHandler( str(filename))
+                IH = ImageHandler( str(filename) ,primaryColor=prof.primaryColor , secondaryColor= prof.secondaryColor)
 
             else:
                 print('Invalid image upload type')
@@ -114,7 +119,12 @@ class PostView(APIView):
             if isAddGradient[0] :
                 IH.overLayImage("\\assets\\images\\basicGradient.png")
             if isAddBranding[0] :
-                IH.overLayImage("\\assets\\images\\"+username+"\\tempImage1.png")
+                try:
+                    IH.overLayImage("\\assets\\images\\"+username+"\\tempImage1.png")
+                except FileNotFoundError:
+                    IH.overLayImage("\\assets\\images\\tempImage1.png")
+
+
 
             importantWords = IH.addText(
                 title[0], fontSize=5, atY=-170, containsImportantWords=isContainImportantWords[0] ,  returnImportantWords=[0], alignment=titleTextAlignment[0])
@@ -147,7 +157,16 @@ class PostView(APIView):
             print("7")
         elif temp[0] == "temp2":
             # template 2 selected
-            IH = ImageHandler("BG.png")
+            try:
+                IH = ImageHandler(username+"\\tempImage2.png" , primaryColor=prof.primaryColor , secondaryColor= prof.secondaryColor)
+                print("try ----->")
+
+            except FileNotFoundError as e:
+                print("catch ----->")
+                print(e)
+
+                IH = ImageHandler("tempImage2.png" , primaryColor=prof.primaryColor , secondaryColor= prof.secondaryColor)
+
             IH.resizeImage(x=1080, y=1080)
 
             if (imageFrom[0] == "upload"):
@@ -174,7 +193,12 @@ class PostView(APIView):
 
             IH.overLayImage("\\output\\"+filename, atX=30, atY=30)
             IH.primaryColor = (255, 255, 255)
-            IH.overLayImage("assets\\images\\"+username+"\\defaultLogo.png", atX=475, atY=550)
+            
+            try:
+                IH.overLayImage("assets\\images\\"+username+"\\defaultLogo.png", atX=475, atY=550)
+            except FileNotFoundError:
+                IH.overLayImage("assets\\images\\defaultLogo.png", atX=475, atY=550)
+
             importantWords = IH.addText(title[0], fontSize=4, fontPath="assets/fonts/Merriweather-Bold.ttf",
                                         atY=-240, containsImportantWords=True, returnImportantWords=True)
 
@@ -208,7 +232,15 @@ class PostView(APIView):
             return Response(res, status=status.HTTP_200_OK ,  content_type="image/jpeg")
         elif temp[0] == "temp3":
             # template 3 selected
-            IH = ImageHandler("tempImage3.png")
+            # IH = ImageHandler("tempImage3.png")
+            try:
+                IH = ImageHandler(username+"\\tempImage2.png" , primaryColor=prof.primaryColor , secondaryColor= prof.secondaryColor)
+                print("try ----->")
+
+            except FileNotFoundError as e:
+                print("catch ----->")
+                print(e)
+
 
             IH.resizeImage(x=1080, y=1080)
 
@@ -232,6 +264,7 @@ class PostView(APIView):
             IH2.resizeImage(x = 917 , y = 502 , type = "centre")
             IH2.saveImage(filename, path="\\assets\\images\\")
             del IH2
+
             IH.overLayImage("\\output\\"+filename , atX = 79  , atY = 178)
             importantWords = IH.addText(title[0] ,fontSize=5  , fontPath = "assets/fonts/Merriweather-Bold.ttf", atY = -200  , containsImportantWords = True , returnImportantWords = True )
           
@@ -264,7 +297,13 @@ class PostView(APIView):
         elif temp[0] == "temp4":
             # template 3 selected
             filename = "content.png"
-            IH = ImageHandler("tempImage4.png")
+            try:
+                IH = ImageHandler("assets\\images\\"+username+"\\tempImage4.png", primaryColor=prof.primaryColor , secondaryColor= prof.secondaryColor)
+            except FileNotFoundError:
+                IH = ImageHandler("tempImage4.png" , primaryColor=prof.primaryColor , secondaryColor= prof.secondaryColor)
+            
+
+            
             importantWords = IH.addText(content[0] ,fontSize=4 , fontPath = "assets/fonts/Merriweather-Bold.ttf"    , marginX = 30  , atY = 200    , containsImportantWords=isContainImportantWords[0] , returnImportantWords=isContainImportantWords[0])
 
             finalPath = IH.saveImage(filename)
@@ -303,9 +342,11 @@ class PostView(APIView):
             IH2 = ImageHandler(filenameToBeSavedAs)
             # IH2.resizeImage(x = 668 ,y = 668)
             IH2.resizeImage(x = 1080 ,y =1080)
-            IH2.saveImage(path = "\\assets\\mages\\" , fileName =   filenameToBeSavedAs)
+            IH2.saveImage(path = "\\assets\\images\\" , fileName =   filenameToBeSavedAs)
             del IH2
             IH.overLayImage("\\assets\\images\\"+filenameToBeSavedAs , atX = 206 , atY = 268)
+                
+                
             finalPath = IH.saveImage(filenameToBeSavedAs)
 
             del IH
