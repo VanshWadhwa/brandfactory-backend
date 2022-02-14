@@ -38,10 +38,10 @@ class Profile(models.Model):
     handleName = models.CharField(max_length=20, null = True , blank=True)
     primaryColor = models.CharField(max_length=7, default="#00ff00")
     secondaryColor = models.CharField(max_length=7, default="#ff0000")
-    logoImage = models.ImageField(default = 'defaultLogo.png' ,max_length=20, storage=OverwriteStorage(), upload_to=lambda instance, filename: 'images/{0}/{1}'.format(instance.user.username, "logoImage.png"))
-    tempImage1 = models.ImageField(default = 'tempImage1.png' ,max_length=20,storage=OverwriteStorage(), upload_to=lambda instance, filename: 'images/{0}/{1}'.format(instance.user.username, "tempImage1.png"))
-    tempImage2 = models.ImageField(default = 'tempImage2.png' ,max_length=20,storage=OverwriteStorage(), upload_to=lambda instance, filename: 'images/{0}/{1}'.format(instance.user.username, "tempImage2.png"))
-    tempImage3 = models.ImageField(default = 'tempImage3.png' ,max_length=20,storage=OverwriteStorage(), upload_to=lambda instance, filename: 'images/{0}/{1}'.format(instance.user.username, "tempImage3.png"))
+    logoImage = models.ImageField(default = 'defaultLogo.png' , storage=OverwriteStorage(), upload_to=lambda instance, filename: 'images/{0}/{1}'.format(instance.user.username, "logoImage.png"))
+    tempImage1 = models.ImageField(default = 'tempImage1.png' ,storage=OverwriteStorage(), upload_to=lambda instance, filename: 'images/{0}/{1}'.format(instance.user.username, "tempImage1.png"))
+    tempImage2 = models.ImageField(default = 'tempImage2.png' ,storage=OverwriteStorage(), upload_to=lambda instance, filename: 'images/{0}/{1}'.format(instance.user.username, "tempImage2.png"))
+    tempImage3 = models.ImageField(default = 'tempImage3.png' ,storage=OverwriteStorage(), upload_to=lambda instance, filename: 'images/{0}/{1}'.format(instance.user.username, "tempImage3.png"))
     telegramToken = models.CharField(max_length=200, null = True , blank=True)
 
 
