@@ -60,9 +60,9 @@ INSTALLED_APPS = [
     'corsheaders', # new
 
     # Local Apps
-    'users', # new
-    'post',
-    'newsData',
+    'users.apps.UsersConfig', # new
+    'post.apps.PostConfig',
+    'newsData.apps.NewsdataConfig',
 ]
 
 MIDDLEWARE = [
