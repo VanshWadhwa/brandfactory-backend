@@ -14,8 +14,8 @@ class Profile(models.Model):
     user = models.OneToOneField(CustomUser , on_delete=models.CASCADE , related_name='profile')
   
     handleName = models.CharField(max_length=20, null = True , blank=True)
-    primaryColor = models.CharField(max_length=7, default="#00ff00")
-    secondaryColor = models.CharField(max_length=7, default="#ff0000")
+    primaryColor = models.CharField(max_length=7, default="#ffffff")
+    secondaryColor = models.CharField(max_length=7, default="#1b9df0")
     logoImage = models.ImageField(default = 'defaultLogo.png' , storage=OverwriteStorage(), upload_to=lambda instance, filename: 'images/{0}/{1}'.format(instance.user.username, "logoImage.png"))
     tempImage1 = models.ImageField(default = 'tempImage1.png' ,storage=OverwriteStorage(), upload_to=lambda instance, filename: 'images/{0}/{1}'.format(instance.user.username, "tempImage1.png"))
     tempImage2 = models.ImageField(default = 'tempImage2.png' ,storage=OverwriteStorage(), upload_to=lambda instance, filename: 'images/{0}/{1}'.format(instance.user.username, "tempImage2.png"))
