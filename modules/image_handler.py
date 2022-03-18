@@ -162,6 +162,8 @@ class ImageHandler:
         # print("widthPerLine = (self.imageObj.width ) / widthOfChar : " ,widthPerLine  , self.imageObj.width  , widthOfChar)
         # print()
         # widthPerLine = ( ) / widthOfChar
+
+        print("text : "  , text)
         if alignment == "justified":
             lines = textwrap.wrap(text, width=widthPerLine)
             # print("TEXT = " , text)
@@ -173,6 +175,8 @@ class ImageHandler:
             # lines = text.split("\n")
             lines = text #last moment edit is buggy definately
             # pass
+        print("lines : "  , lines)
+        
         heightOfTextBox = 0
         heightOfTextBox = heightOfChar * len(lines)
         #               DISCLAIMER :

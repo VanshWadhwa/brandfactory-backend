@@ -126,8 +126,18 @@ class PostView(APIView):
 
 
 
+            atY = -170
+            if titleTextPosition[0]=='top':
+                atY = 200
+            elif titleTextPosition[0] == 'center':
+                atY = 1080/2
+            else :
+                atY = -170
+
+
+
             importantWords = IH.addText(
-                title[0], fontSize=5, atY=-170, containsImportantWords=isContainImportantWords[0] ,  returnImportantWords=[0], alignment=titleTextAlignment[0])
+                title[0], fontSize=5, atY=atY, containsImportantWords=isContainImportantWords[0] ,  returnImportantWords=[0], alignment=titleTextAlignment[0])
             finalPath = IH.saveImage()
 
             del IH
@@ -240,6 +250,8 @@ class PostView(APIView):
             except FileNotFoundError as e:
                 print("catch ----->")
                 print(e)
+                IH = ImageHandler("tempImage2.png" , primaryColor=prof.primaryColor , secondaryColor= prof.secondaryColor)
+
 
 
             IH.resizeImage(x=1080, y=1080)
