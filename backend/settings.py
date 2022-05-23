@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+
+    # AWS
+    'storages',
     # 3rd Party Apps
     'rest_framework', # new
     'rest_framework.authtoken', # new
@@ -58,9 +61,9 @@ INSTALLED_APPS = [
     'corsheaders', # new
 
     # Local Apps
-    'users', # new
-    'post',
-    'newsData',
+    'users.apps.UsersConfig', # new
+    'post.apps.PostConfig',
+    'newsData.apps.NewsdataConfig',
 ]
 
 MIDDLEWARE = [
@@ -170,3 +173,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'assets')
 MEDIA_URL = '/assets/'
+
+AWS_QUERYSTRING_AUTH = False
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+AWS_ACCESS_KEY_ID = 'AKIARIG26TIZKQDCUEOR'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'brandfolder-bucket'
+
+
+
+# django_heroku.settings(locals())
