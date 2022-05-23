@@ -14,7 +14,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-import django_heroku
+# import django_heroku
 import os
 
 
@@ -51,6 +51,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+
+    # AWS
+    'storages',
     # 3rd Party Apps
     'rest_framework', # new
     'rest_framework.authtoken', # new
@@ -151,6 +154,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -176,4 +180,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'assets')
 MEDIA_URL = '/assets/'
 
-django_heroku.settings(locals())
+AWS_QUERYSTRING_AUTH = False
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+AWS_ACCESS_KEY_ID = 'AKIARIG26TIZKQDCUEOR'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'brandfolder-bucket'
+
+
+
+# django_heroku.settings(locals())
